@@ -1,9 +1,7 @@
 <?php
 
-namespace Drupal\news_feed_date_formatter\Plugin\Filter\FieldFormatter;
+namespace Drupal\news_feed_date_formatter\Plugin\Field\FieldFormatter;
 
-use Drupal\Component\Render\FormattableMarkup;
-use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\Core\Datetime\DateFormatterInterface;
 use Drupal\Core\Field\Attribute\FieldFormatter;
 use Drupal\Core\Field\FieldDefinitionInterface;
@@ -32,6 +30,41 @@ class NewsFeedDateFormatter extends FormatterBase {
    * @var \Drupal\Core\Datetime\DateFormatterInterface
    */
   protected $dateFormatter;
+
+  /**
+   * The date format for deciding if two dates are the same day.
+   *
+   * @var string
+   */
+  protected $dateCompareToday;
+
+  /**
+   * The day today in Y-m-d format.
+   *
+   * @var string
+   */
+  protected $today;
+
+  /**
+   * The date format for the complete date.
+   *
+   * @var string
+   */
+  protected $titleFormat;
+
+  /**
+   * The date format for the short date in today mode.
+   *
+   * @var string
+   */
+  protected $shortFormatToday;
+
+  /**
+   * The date format for the short date in yesterday mode.
+   *
+   * @var string
+   */
+  protected $shortFormatYesterday;
 
   /**
    * Constructs a NewsFeedDateFormatter object.
@@ -74,6 +107,11 @@ class NewsFeedDateFormatter extends FormatterBase {
     );
 
     $this->dateFormatter = $date_formatter;
+    $this->dateCompareToday = 'Y-m-d';
+    $this->today = date($this->dateCompareToday);
+    $this->titleFormat = 'l j F à G\hi';
+    $this->shortFormatToday = 'H\hi';
+    $this->shortFormatYesterday = 'd M.';
   }
 
   /**
@@ -105,48 +143,50 @@ class NewsFeedDateFormatter extends FormatterBase {
     $elements = [];
 
     foreach ($items as $delta => $item) {
-      if ($item->value) {
-        $updated = $this->formatTimestamp($item->value);
+      $timestamp = $item->value;
+
+      if ($timestamp) {
+        // Determine the short date format.
+        if (date($this->dateCompareToday, $timestamp) === $this->today) {
+          $short_format = $this->shortFormatToday;
+        }
+        else {
+          $short_format = $this->shortFormatYesterday;
+        }
+
+        // Compute the short date.
+        $short_date = $this->dateFormatter->format(
+          $timestamp,
+          'custom',
+          $short_format
+        );
+
+        // Compute the title date.
+        $title_date = $this->dateFormatter->format(
+          $timestamp,
+          'custom',
+          $this->titleFormat
+        );
+
+        $news_feed_date = [
+          '#theme' => 'time',
+          '#text' => $short_date,
+          '#attributes' => [
+            'datetime' => $title_date,
+          ],
+          '#cache' => [
+            'contexts' => ['timezone'],
+          ],
+        ];
       }
       else {
-        $updated = ['#markup' => ''];
+        $news_feed_date = ['#markup' => ''];
       }
 
-      $elements[$delta] = $updated;
+      $elements[$delta] = $news_feed_date;
     }
 
     return $elements;
-  }
-
-  /**
-   * Formats a timestamp.
-   *
-   * @param int $timestamp
-   *   A UNIX timestamp to format.
-   *
-   * @return array
-   *   The formatted timestamp string.
-   */
-  protected function formatTimestamp($timestamp) {
-    if (date('Y-m-d', $timestamp) === date('Y-m-d')) {
-      $format = 'H\hi';
-    }
-    else {
-      $format = 'd M.';
-    }
-
-    // @see \Drupal\Core\Datetime\DateFormatterInterface::format().
-    $short_date = $this->dateFormatter->format($timestamp, 'custom', $format);
-
-    $build = [
-      '#markup' => new FormattableMarkup(
-          '@short_date',
-          ['@short_date' => $short_date->getString()]
-      ),
-    ];
-
-    CacheableMetadata::createFromObject($short_date)->applyTo($build);
-    return $build;
   }
 
 }
