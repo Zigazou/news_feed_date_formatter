@@ -46,7 +46,14 @@ class NewsFeedDateFormatter extends FormatterBase {
   protected $today;
 
   /**
-   * The date format for the complete date.
+   * The date format for the datetime attribute.
+   *
+   * @var string
+   */
+  protected $datetimeFormat;
+
+  /**
+   * The date format for the title attribute.
    *
    * @var string
    */
@@ -109,6 +116,7 @@ class NewsFeedDateFormatter extends FormatterBase {
     $this->dateFormatter = $date_formatter;
     $this->dateCompareToday = 'Y-m-d';
     $this->today = date($this->dateCompareToday);
+    $this->datetimeFormat = 'c';
     $this->titleFormat = 'l j F à G\hi';
     $this->shortFormatToday = 'H\hi';
     $this->shortFormatYesterday = 'd M.';
@@ -168,11 +176,19 @@ class NewsFeedDateFormatter extends FormatterBase {
           $this->titleFormat
         );
 
+        // Compute the datetime date.
+        $datetime_date = $this->dateFormatter->format(
+          $timestamp,
+          'custom',
+          $this->datetimeFormat
+        );
+
         $news_feed_date = [
           '#theme' => 'time',
           '#text' => $short_date,
           '#attributes' => [
-            'datetime' => $title_date,
+            'datetime' => $datetime_date,
+            'title' => $title_date,
           ],
           '#cache' => [
             'contexts' => ['timezone'],
