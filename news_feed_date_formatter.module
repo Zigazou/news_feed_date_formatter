@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Defines a simple string formatter.
+ */
+
+use Drupal\Core\Field\FieldTypeCategoryManagerInterface;
+use Drupal\Core\Url;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ */
+function news_feed_date_formatter_field_formatter_info_alter(&$info) {
+  $info['string']['field_types'][] = 'timestamp';
+  $info['string']['field_types'][] = 'created';
+  $info['string']['field_types'][] = 'changed';
+}

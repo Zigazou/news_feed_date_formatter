@@ -1,0 +1,25 @@
+# French translation of News feed date formatter (1.0)
+# Copyright (c) 2025 by Frédéric BISSON
+# Frédéric BISSON <zigazou@protonmail.com>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: News feed date formatter (1.0)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Last-Translator: Frédéric BISSON <zigazou@protonmail.com>\n"
+"Language-Team: French <zigazou@protonmail.com>\n"
+"Language: fr\n"
+"PO-Revision-Date: 2025-01-30 07:24+0100\n"
+"X-Generator: Gtranslator 42.0\n"
+
+msgid "News feed date formatter"
+msgstr "Formateur de date pour le fil actu"
+
+msgid "Defines a date formatter dedicated to news feed."
+msgstr "Définit un formateur de date dédié au fil actu."
+
+msgid "News feed date"
+msgstr "Date du fil actu"

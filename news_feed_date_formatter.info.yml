@@ -1,0 +1,8 @@
+name: 'News feed date formatter'
+type: module
+description: 'Defines a date formatter dedicated to news feed.'
+package: Fields
+core_version_requirement: ^11
+version: "1.0"
+dependencies:
+  - drupal:field
