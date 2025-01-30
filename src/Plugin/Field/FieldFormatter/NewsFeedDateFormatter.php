@@ -11,7 +11,6 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\FormatterBase;
 use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Plugin implementation of the 'timestamp' formatter as time ago.
@@ -35,13 +34,6 @@ class NewsFeedDateFormatter extends FormatterBase {
   protected $dateFormatter;
 
   /**
-   * The current Request object.
-   *
-   * @var \Symfony\Component\HttpFoundation\Request
-   */
-  protected $request;
-
-  /**
    * Constructs a NewsFeedDateFormatter object.
    *
    * @param string $plugin_id
@@ -60,8 +52,6 @@ class NewsFeedDateFormatter extends FormatterBase {
    *   Any third party settings.
    * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatter service.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current request.
    */
   public function __construct(
     $plugin_id,
@@ -72,7 +62,6 @@ class NewsFeedDateFormatter extends FormatterBase {
     $view_mode,
     array $third_party_settings,
     DateFormatterInterface $date_formatter,
-    Request $request,
   ) {
     parent::__construct(
       $plugin_id,
@@ -85,7 +74,6 @@ class NewsFeedDateFormatter extends FormatterBase {
     );
 
     $this->dateFormatter = $date_formatter;
-    $this->request = $request;
   }
 
   /**
@@ -106,8 +94,7 @@ class NewsFeedDateFormatter extends FormatterBase {
       $configuration['label'],
       $configuration['view_mode'],
       $configuration['third_party_settings'],
-      $container->get('date.formatter'),
-      $container->get('request_stack')->getCurrentRequest()
+      $container->get('date.formatter')
     );
   }
 
