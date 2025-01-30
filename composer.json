@@ -1,0 +1,14 @@
+{
+    "name": "drupal/news_feed_date_formatter",
+    "description": "Defines a date formatter dedicated to news feed.",
+    "type": "drupal-custom-module",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Frédéric BISSON (zigazou)",
+            "email": "zigazou@protonmail.com",
+            "homepage": "https://www.drupal.org/u/zigazou",
+            "role": "Maintainer"
+        }
+    ]
+}
