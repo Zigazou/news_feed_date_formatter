@@ -157,9 +157,11 @@ class NewsFeedDateFormatter extends FormatterBase {
         // Determine the short date format.
         if (date($this->dateCompareToday, $timestamp) === $this->today) {
           $short_format = $this->shortFormatToday;
+          $class = 'nfd-today';
         }
         else {
           $short_format = $this->shortFormatYesterday;
+          $class = 'nfd-yesterday';
         }
 
         // Compute the short date.
@@ -187,6 +189,7 @@ class NewsFeedDateFormatter extends FormatterBase {
           '#theme' => 'time',
           '#text' => $short_date,
           '#attributes' => [
+            'class' => [$class],
             'datetime' => $datetime_date,
             'title' => $title_date,
           ],
