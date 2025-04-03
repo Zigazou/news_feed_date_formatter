@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
     'timestamp',
     'created',
     'changed',
+    'date',
+    'daterange',
   ],
 )]
 class NewsFeedDateFormatter extends FormatterBase {
@@ -152,6 +154,11 @@ class NewsFeedDateFormatter extends FormatterBase {
 
     foreach ($items as $delta => $item) {
       $timestamp = $item->value;
+
+      if (is_string($timestamp)) {
+        // Convert the string to a timestamp.
+        $timestamp = strtotime($timestamp);
+      }
 
       if ($timestamp) {
         // Determine the short date format.
